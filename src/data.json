@@ -1,0 +1,102 @@
+[
+  {
+    "first_name": "John",
+    "last_name": "Smith",
+    "email_address": "John.Smith@some-email-domain.com",
+    "type": "mentor",
+    "capacity": 1,
+    "subjects": [
+      "communication",
+      "negotiation"
+    ]
+  },
+  {
+    "first_name": "Albert",
+    "last_name": "Einstein",
+    "email_address": "Albert.Einstein@some-email-domain.com",
+    "type": "mentor",
+    "capacity": 2,
+    "subjects": [
+      "physics",
+      "maths"
+    ]
+  },
+  {
+    "first_name": "Issac",
+    "last_name": "Newton",
+    "email_address": "Issac.Newton@some-email-domain.com",
+    "type": "mentor",
+    "capacity": 1,
+    "subjects": [
+      "communication",
+      "physics"
+    ]
+  },
+  {
+    "first_name": "Jacek",
+    "last_name": "Sasin",
+    "email_address": "Jacek.Sasin@some-email-domain.com",
+    "type": "mentee",
+    "subjects": [
+      "communication",
+      "physics"
+    ]
+  },
+  {
+    "first_name": "Mateusz",
+    "last_name": "Morawiecki",
+    "email_address": "Mateusz.Morawiecki@some-email-domain.com",
+    "type": "mentee",
+    "subjects": [
+      "maths"
+    ]
+  },
+  {
+    "first_name": "Jaroslaw",
+    "last_name": "Kaczynski",
+    "email_address": "Jaroslaw.Kaczynski@some-email-domain.com",
+    "type": "mentee",
+    "subjects": [
+      "physics",
+      "negotiation"
+    ]
+  },
+  {
+    "first_name": "Lech",
+    "last_name": "TheFirst",
+    "email_address": "Lech.TheFirst@some-email-domain.com",
+    "type": "mentee",
+    "subjects": [
+      "physics",
+      "maths"
+    ]
+  },
+  {
+    "first_name": "Unassigned1",
+    "last_name": "Unassigned1",
+    "email_address": "Unassigned1@some-email-domain.com",
+    "capacity": 1,
+    "type": "mentor",
+    "subjects": [
+      "Unassigned1"
+    ]
+  },
+  {
+    "first_name": "Unassigned2",
+    "last_name": "Unassigned2",
+    "email_address": "Unassigned2@some-email-domain.com",
+    "type": "mentee",
+    "subjects": [
+      "Unassigned2"
+    ]
+  },
+  {
+    "first_name": "Unassigned3",
+    "last_name": "Unassigned3",
+    "email_address": "Unassigned3@some-email-domain.com",
+    "type": "mentee",
+    "subjects": [
+      "Unassigned3"
+    ]
+  }
+]
