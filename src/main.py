@@ -2,7 +2,7 @@ import json
 
 import networkx as nx
 
-from src.mentor import Mentee, Mentor, Person
+from src.data_classes import Mentee, Mentor, Person
 
 
 def get_list_of_participants() -> list[dict[str, [str, int]]]:
@@ -22,11 +22,12 @@ def get_mentors_and_mentees(
             last_name=participant["last_name"],
             email_address=participant["email_address"]
         )
-        if participant["type"] == 'mentee':
+        if (participant["role"].lower() == 'mentee'
+                or participant["role"].lower == 'Both - Mentor and Mentee'):
             mentees.append(
                 Mentee(person, set(participant["subjects"]))
             )
-        elif participant["type"] == 'mentor':
+        elif participant["role"] == 'mentor':
             for capacity_id in range(participant["capacity"]):
                 mentors.append(
                     Mentor(person, set(participant["subjects"]), capacity_id))
@@ -46,12 +47,21 @@ def get_mentor_mentee_pairs(mentors, mentees) -> list[tuple[Mentor, Mentee]]:
 
     for mentor in mentors:
         for mentee in mentees:
-            if mentor.expertise.intersection(mentee.interests):
+            if (
+                # mentor.person.years_of_experience >= mentee.person.years_of_experience
+                # and mentor.person.region != mentee.person.region
+                mentor.person.region != mentee.person.region
+                and mentor.expertise.intersection(mentee.interests)
+                and mentor.person != mentee.person
+            ):
                 graph.add_edge(mentor, mentee)
 
     results: list[tuple[Mentor, Mentee]] = list(
-        filter(lambda x: isinstance(x[0], Mentor),
-               nx.bipartite.maximum_matching(graph, top_nodes=mentors).items()))
+        filter(
+            lambda x: isinstance(x[0], Mentor),
+            nx.bipartite.maximum_matching(graph, top_nodes=mentors).items()
+        )
+    )
 
     return results
 

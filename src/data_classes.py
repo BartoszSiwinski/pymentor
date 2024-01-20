@@ -7,8 +7,8 @@ class Person:
     first_name: str
     last_name: str
     email_address: str
-    # years_of_experience: Optional[int] = None
-    # region: Optional[str] = None
+    years_of_experience: Optional[int] = None
+    region: Optional[str] = None
 
 
 @dataclass
