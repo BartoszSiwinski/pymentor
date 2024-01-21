@@ -34,7 +34,7 @@ def get_mentors_and_mentees(
         else:
             raise ValueError(
                 f"Incorrect entity type. Should be 'mentor' or 'mentee', but"
-                f" is '${participant['type']}'"
+                f" is '${participant['role']}'"
             )
     return mentors, mentees
 

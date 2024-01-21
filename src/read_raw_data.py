@@ -10,6 +10,10 @@ def main():
     df = rename_columns(df)
     df = consolidate_mentee_interests(df)
     df = consolidate_mentor_interests(df)
+    df = process_experience_range_column_values(df)
+    df = process_role_column_values(df)
+
+    df.to_json('../data_from_excel.json', indent=4, orient='records')
 
     return df
 
@@ -48,7 +52,7 @@ def rename_columns(df: pd.DataFrame):
             "Full Name": "fullname",
             "E-mail Address": "email_address",
             "Q40": "business_unit",
-            "Q21": "experience_range",
+            "Q21": "years_of_experience",
             "Q22": "role",
             "Q23": "employee_resource_group"
         }
@@ -93,6 +97,28 @@ def consolidate_mentor_interests(df: pd.DataFrame):
         df,
         'mentor_interests',
         mentee_interests_columns
+    )
+
+
+def process_experience_range_column_values(df: pd.DataFrame):
+    return df.replace(
+        {
+            "1-5 Years": 0,
+            "5-10 Years": 1,
+            "10-15 Years": 2,
+            "15-20 Years": 3,
+            "20+ Years": 4,
+        }
+    )
+
+
+def process_role_column_values(df: pd.DataFrame):
+    return df.replace(
+        {
+            "Mentor": "mentor",
+            "Mentee": "mentee",
+            "Both - Mentor and Mentee": "both",
+        }
     )
 
 
