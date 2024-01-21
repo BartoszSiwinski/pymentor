@@ -1,21 +1,18 @@
-import json
+from typing import Optional
 
 import networkx as nx
 
 from src.data_classes import Mentee, Mentor, Person
 
 
-def get_list_of_participants() -> list[dict[str, [str, int]]]:
-    with open('data.json') as f:
-        data = json.load(f)
-    return data
-
-
 def have_mentorship_overlap(
         mentor: Mentor,
         mentee: Mentee,
-        min_interest_priority_level: int = 999
+        min_interest_priority_level: Optional[int] = None
 ) -> bool:
+    if min_interest_priority_level is None:
+        min_interest_priority_level = 999
+
     for interest in mentee.interests:
         if (
                 mentee.interests[interest] <= min_interest_priority_level
@@ -33,8 +30,10 @@ def get_mentors_and_mentees(
     mentees = []
     for participant in participants:
         person = Person(
-            full_name=participant["full_name"],
-            email_address=participant["email_address"]
+            fullname=participant["fullname"],
+            email_address=participant["email_address"],
+            years_of_experience=participant["years_of_experience"],
+            business_unit=participant["business_unit"]
         )
 
         if participant["role"] not in {'mentor', 'mentee', 'both'}:
@@ -44,12 +43,10 @@ def get_mentors_and_mentees(
             )
 
         if participant["role"] in {'mentee', 'both'}:
-            mentees.append(
-                Mentee(person, set(participant["subjects"]))
-            )
+            mentees.append(Mentee(person, participant["mentee_interests"]))
+
         if participant["role"] in {'mentor', 'both'}:
-            # for capacity_id in range(participant["capacity"]):
-            mentors.append(Mentor(person, set(participant["subjects"])))
+            mentors.append(Mentor(person, participant["mentor_expertise"]))
 
     return mentors, mentees
 
@@ -57,7 +54,7 @@ def get_mentors_and_mentees(
 def get_mentor_mentee_pairs(
         mentors: list[Mentor],
         mentees: list[Mentee],
-        min_engagement_level: int = 0
+        min_engagement_level: Optional[int] = None
 ) -> list[tuple[Mentor, Mentee]]:
     graph = nx.Graph()
 
@@ -67,10 +64,10 @@ def get_mentor_mentee_pairs(
     for mentor in mentors:
         for mentee in mentees:
             if (
-                mentor.person.years_of_experience >= mentee.person.years_of_experience
-                and mentor.person.region != mentee.person.region
-                and have_mentorship_overlap(mentor, mentee, min_engagement_level)
-                and mentor.person != mentee.person
+                # mentor.person.years_of_experience >= mentee.person.years_of_experience and
+                # mentor.person.business_unit != mentee.person.business_unit and
+                have_mentorship_overlap(mentor, mentee, min_engagement_level) and
+                mentor.person != mentee.person
             ):
                 graph.add_edge(mentor, mentee)
 

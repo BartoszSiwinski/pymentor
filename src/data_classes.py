@@ -1,13 +1,12 @@
 from dataclasses import dataclass
-from typing import Optional
 
 
 @dataclass
 class Person:
-    full_name: str
+    fullname: str
     email_address: str
-    years_of_experience: Optional[int] = None
-    region: Optional[str] = None
+    years_of_experience: int
+    business_unit: str
 
     def __hash__(self) -> int:
         return hash(self.email_address)

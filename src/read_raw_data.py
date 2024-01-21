@@ -21,7 +21,7 @@ def get_processed_data_for_mentoring_program(input_excel_file_path: str):
     df = drop_first_row(df)
     df = rename_columns(df)
     df = consolidate_mentee_interests(df)
-    df = consolidate_mentor_interests(df)
+    df = consolidate_mentor_expertise(df)
     df = process_experience_range_column_values(df)
     df = process_role_column_values(df)
 
@@ -99,7 +99,7 @@ def consolidate_mentee_interests(df: pd.DataFrame):
         mentee_interests_columns)
 
 
-def consolidate_mentor_interests(df: pd.DataFrame):
+def consolidate_mentor_expertise(df: pd.DataFrame):
     mentee_interests_columns = [
         column for column in df.columns
         if column.startswith(("Q70_", "Q71_", "Q72_", "Q73_"))
@@ -107,7 +107,7 @@ def consolidate_mentor_interests(df: pd.DataFrame):
 
     return consolidate_interests(
         df,
-        'mentor_interests',
+        'mentor_expertise',
         mentee_interests_columns
     )
 
