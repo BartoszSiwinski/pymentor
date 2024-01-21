@@ -1,6 +1,17 @@
+import json
 import pandas as pd
 
+from utilities import get_key_for_value
+
 FILE_PATH = '../mentoring_raw_data.xlsx'
+
+
+def get_interests_map():
+    with open('../refs/interests_map.json') as file:
+        return json.load(file)
+
+
+INTERESTS_MAP = get_interests_map()
 
 
 def get_processed_data_for_mentoring_program(input_excel_file_path: str):
@@ -63,19 +74,16 @@ def rename_columns(df: pd.DataFrame):
 
 def consolidate_interests(
         df: pd.DataFrame,
-        consolidate_data_column_name: str,
+        consolidate_interests_column_name: str,
         columns_to_consolidate: list[str]
 ):
     def apply_function(row):
-        return sorted(
-            [
-                [column, row[column]]
-                for column in columns_to_consolidate
-                if pd.notna(row[column])
-            ],
-            key=lambda x: x[1]
-        )
-    df[consolidate_data_column_name] = df.apply(apply_function, axis=1)
+        return {
+            get_key_for_value(INTERESTS_MAP, column): row[column]
+            for column in columns_to_consolidate
+            if pd.notna(row[column])
+        }
+    df[consolidate_interests_column_name] = df.apply(apply_function, axis=1)
     df = df.drop(columns=columns_to_consolidate)
     return df
 
@@ -85,7 +93,10 @@ def consolidate_mentee_interests(df: pd.DataFrame):
         column for column in df.columns if column.startswith('Q6_')
     ]
 
-    return consolidate_interests(df,'mentee_interests',mentee_interests_columns)
+    return consolidate_interests(
+        df,
+        'mentee_interests',
+        mentee_interests_columns)
 
 
 def consolidate_mentor_interests(df: pd.DataFrame):
