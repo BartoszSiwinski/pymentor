@@ -1,16 +1,14 @@
-import json
 
+from read_raw_data import get_processed_data_for_mentoring_program
 from matching import get_mentor_mentee_pairs, get_mentors_and_mentees
 
 
-def get_list_of_participants(file_path) -> list[dict[str, [str, int]]]:
-    with open(file_path) as f:
-        data = json.load(f)
-    return data
-
-
 def main():
-    participants = get_list_of_participants('../data_from_excel.json')
+    participants = get_processed_data_for_mentoring_program(
+        '../mentoring_raw_data.xlsx',
+        save_to_json=True
+    )
+
     mentors, mentees = get_mentors_and_mentees(participants)
     results = get_mentor_mentee_pairs(mentors, mentees)
 

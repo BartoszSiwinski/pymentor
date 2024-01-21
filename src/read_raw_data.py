@@ -14,7 +14,10 @@ def get_interests_map():
 INTERESTS_MAP = get_interests_map()
 
 
-def get_processed_data_for_mentoring_program(input_excel_file_path: str):
+def get_processed_data_for_mentoring_program(
+        input_excel_file_path: str,
+        save_to_json: bool = False
+) -> list[dict[str, any]]:
     df = pd.read_excel(input_excel_file_path)
     df = select_relevant_columns(df)
     # 1st row contains some metadata irrelavant for the mentoring program
@@ -25,9 +28,10 @@ def get_processed_data_for_mentoring_program(input_excel_file_path: str):
     df = process_experience_range_column_values(df)
     df = process_role_column_values(df)
 
-    df.to_json('../data_from_excel.json', indent=4, orient='records')
+    if save_to_json:
+        df.to_json('../data_from_excel.json', indent=4, orient='records')
 
-    return df
+    return df.to_dict(orient='records')
 
 
 def select_relevant_columns(df: pd.DataFrame):
@@ -136,5 +140,5 @@ def process_role_column_values(df: pd.DataFrame):
     return df
 
 
-print(get_processed_data_for_mentoring_program(FILE_PATH))
-print(get_processed_data_for_mentoring_program(FILE_PATH).iloc[0])
+if __name__ == "__main__":
+    print(get_processed_data_for_mentoring_program(FILE_PATH))
