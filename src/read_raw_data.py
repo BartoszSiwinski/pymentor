@@ -3,9 +3,10 @@ import pandas as pd
 FILE_PATH = '../mentoring_raw_data.xlsx'
 
 
-def main():
-    df = pd.read_excel(FILE_PATH)
+def get_processed_data_for_mentoring_program(input_excel_file_path: str):
+    df = pd.read_excel(input_excel_file_path)
     df = select_relevant_columns(df)
+    # 1st row contains some metadata irrelavant for the mentoring program
     df = drop_first_row(df)
     df = rename_columns(df)
     df = consolidate_mentee_interests(df)
@@ -101,7 +102,7 @@ def consolidate_mentor_interests(df: pd.DataFrame):
 
 
 def process_experience_range_column_values(df: pd.DataFrame):
-    return df.replace(
+    df["years_of_experience"] = df["years_of_experience"].replace(
         {
             "1-5 Years": 0,
             "5-10 Years": 1,
@@ -110,17 +111,19 @@ def process_experience_range_column_values(df: pd.DataFrame):
             "20+ Years": 4,
         }
     )
+    return df
 
 
 def process_role_column_values(df: pd.DataFrame):
-    return df.replace(
+    df["role"] = df["role"].replace(
         {
             "Mentor": "mentor",
             "Mentee": "mentee",
             "Both - Mentor and Mentee": "both",
         }
     )
+    return df
 
 
-print(main())
-print(main().iloc[0])
+print(get_processed_data_for_mentoring_program(FILE_PATH))
+print(get_processed_data_for_mentoring_program(FILE_PATH).iloc[0])

@@ -18,24 +18,26 @@ def get_mentors_and_mentees(
     mentees = []
     for participant in participants:
         person = Person(
-            first_name=participant["first_name"],
-            last_name=participant["last_name"],
+            full_name=participant["full_name"],
             email_address=participant["email_address"]
         )
+
+        if participant["role"] not in {'mentor', 'mentee', 'both'}:
+            raise ValueError(
+                f"Incorrect entity type. Should be 'mentor' or 'mentee', but"
+                f" is '${participant['role']}'"
+            )
+
         if (participant["role"].lower() == 'mentee'
                 or participant["role"].lower == 'Both - Mentor and Mentee'):
             mentees.append(
                 Mentee(person, set(participant["subjects"]))
             )
-        elif participant["role"] == 'mentor':
+        if participant["role"] == 'mentor':
             for capacity_id in range(participant["capacity"]):
                 mentors.append(
                     Mentor(person, set(participant["subjects"]), capacity_id))
-        else:
-            raise ValueError(
-                f"Incorrect entity type. Should be 'mentor' or 'mentee', but"
-                f" is '${participant['role']}'"
-            )
+
     return mentors, mentees
 
 
