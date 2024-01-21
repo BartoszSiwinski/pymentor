@@ -12,6 +12,9 @@ def main():
     mentors, mentees = get_mentors_and_mentees(participants)
     mentoring_pairs = get_mentor_mentee_pairs(mentors, mentees)
 
+    # TODO: Add a feature for mentor having multiple mentee
+    # TODO: Add a feature for looping over with priority assigned and then defaulting to whatever
+    # TODO: Condition matching based on business unit and years of experience.
     assigned_mentees = [x[1] for x in mentoring_pairs]
     unassigned_mentees = [x for x in mentees if x not in assigned_mentees]
     assigned_mentors = [x[0] for x in mentoring_pairs]
