@@ -3,8 +3,6 @@ import pandas as pd
 
 from utilities import get_key_for_value
 
-FILE_PATH = '../mentoring_raw_data.xlsx'
-
 
 def get_interests_map():
     with open('../refs/interests_map.json') as file:
@@ -20,7 +18,7 @@ def get_processed_data_for_mentoring_program(
 ) -> list[dict[str, any]]:
     df = pd.read_excel(input_excel_file_path)
     df = select_relevant_columns(df)
-    # 1st row contains some metadata irrelavant for the mentoring program
+    # 1st row contains some metadata irrelevant for the mentoring program
     df = drop_first_row(df)
     df = rename_columns(df)
     df = consolidate_mentee_interests(df)
@@ -140,7 +138,3 @@ def process_role_column_values(df: pd.DataFrame):
         }
     )
     return df
-
-
-if __name__ == "__main__":
-    print(get_processed_data_for_mentoring_program(FILE_PATH))

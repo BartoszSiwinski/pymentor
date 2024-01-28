@@ -2,7 +2,7 @@ import os
 
 import pandas as pd
 
-from participants import Mentee, Mentor
+from src.participants import Mentee, Mentor
 
 
 def _append_data_to_excel(

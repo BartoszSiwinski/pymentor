@@ -1,14 +1,23 @@
 from read_raw_data import get_processed_data_for_mentoring_program
-from matching import get_mentor_mentee_pairs, get_mentors_and_mentees
+from mentoring_matcher import MentoringMatcher
+from src.participants import get_mentors_and_mentees
 from save_results import save_mentors_to_excel, save_mentees_to_excel, save_mentorship_pairs_excel
 import matching_conditions
 
 
+# Data to change
+RAW_DATA_EXCEL_FILE_PATH = '../mentoring_raw_data.xlsx'
+RESULTS_FILE_PATH = '../results.xlsx'
+
+
 def main():
     participants = get_processed_data_for_mentoring_program(
-        '../mentoring_raw_data.xlsx',
+        RAW_DATA_EXCEL_FILE_PATH,
         save_to_json=True
     )
+    mentors, mentees = get_mentors_and_mentees(participants)
+
+    mentoring_matcher = MentoringMatcher(mentors, mentees)
 
     conditions_for_first_round = [
         matching_conditions.check_mentor_and_mentee_are_not_from_the_same_business_unit,
@@ -16,30 +25,38 @@ def main():
         matching_conditions.get_competency_overlap_checker(1),
         matching_conditions.check_mentor_and_mentee_are_not_the_same_person,
     ]
+    mentoring_matcher.match_unassigned(conditions_for_first_round)
 
-    mentors, mentees = get_mentors_and_mentees(participants)
-    mentoring_pairs = get_mentor_mentee_pairs(mentors, mentees, conditions_for_first_round)
+    conditions_for_second_round = [
+        matching_conditions.check_mentor_and_mentee_are_not_from_the_same_business_unit,
+        matching_conditions.check_mentor_has_no_less_experience_than_mentee,
+        matching_conditions.get_competency_overlap_checker(2),
+        matching_conditions.check_mentor_and_mentee_are_not_the_same_person,
+    ]
+    mentoring_matcher.match_unassigned(conditions_for_second_round)
 
-    # TODO: Add a feature for looping over with priority assigned and then defaulting to whatever
-    assigned_mentees = [x[1] for x in mentoring_pairs]
-    unassigned_mentees = [x for x in mentees if x not in assigned_mentees]
-    assigned_mentors = [x[0] for x in mentoring_pairs]
-    unassigned_mentors = [x for x in mentors if x not in assigned_mentors]
+    conditions_for_third_round = [
+        matching_conditions.get_competency_overlap_checker(),
+        matching_conditions.check_mentor_and_mentee_are_not_the_same_person,
+    ]
+    mentoring_matcher.match_unassigned(conditions_for_third_round)
 
     save_mentors_to_excel(
-        '../results.xlsx',
+        RESULTS_FILE_PATH,
         'all_mentors',
-        assigned_mentors, unassigned_mentors
+        mentoring_matcher.assigned_mentors,
+        mentoring_matcher.unassigned_mentors
     )
     save_mentees_to_excel(
-        '../results.xlsx',
+        RESULTS_FILE_PATH,
         'all_mentees',
-        assigned_mentees, unassigned_mentees
+        mentoring_matcher.assigned_mentees,
+        mentoring_matcher.unassigned_mentees
     )
     save_mentorship_pairs_excel(
-        '../results.xlsx',
+        RESULTS_FILE_PATH,
         'mentoring_pairs',
-        mentoring_pairs
+        mentoring_matcher.matched_pairs
     )
 
 
