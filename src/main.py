@@ -6,7 +6,7 @@ import matching_conditions
 
 
 # Data to change
-RAW_DATA_EXCEL_FILE_PATH = '../mentoring_raw_data.xlsx'
+RAW_DATA_EXCEL_FILE_PATH = 'mentoring_raw_data.xlsx'
 RESULTS_FILE_PATH = '../results.xlsx'
 
 

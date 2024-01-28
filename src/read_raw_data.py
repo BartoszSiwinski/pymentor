@@ -1,11 +1,15 @@
+import os
 import json
 import pandas as pd
 
 from utilities import get_key_for_value
 
 
+cwd = os.getcwd()
+
+
 def get_interests_map():
-    with open('../refs/interests_map.json') as file:
+    with open(cwd+'/refs/interests_map.json') as file:
         return json.load(file)
 
 
