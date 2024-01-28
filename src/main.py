@@ -1,6 +1,6 @@
 from read_raw_data import get_processed_data_for_mentoring_program
 from mentoring_matcher import MentoringMatcher
-from src.participants import get_mentors_and_mentees
+from participants import get_mentors_and_mentees
 from save_results import save_mentors_to_excel, save_mentees_to_excel, save_mentorship_pairs_excel
 import matching_conditions
 

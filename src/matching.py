@@ -1,7 +1,7 @@
 import networkx as nx
 
-from src.participants import Mentee, Mentor
-from src.matching_conditions import (
+from participants import Mentee, Mentor
+from matching_conditions import (
     are_mentor_and_mentee_a_match_under_conditions,
     TYPE_FOR_FUNCTION_CHECKING_MATCHING_CONDITION
 )

@@ -1,6 +1,6 @@
-from src.matching import match_mentors_and_mentees
-from src.participants import Mentee, Mentor
-from src.matching_conditions import TYPE_FOR_FUNCTION_CHECKING_MATCHING_CONDITION
+from matching import match_mentors_and_mentees
+from participants import Mentee, Mentor
+from matching_conditions import TYPE_FOR_FUNCTION_CHECKING_MATCHING_CONDITION
 
 
 class MentoringMatcher:
