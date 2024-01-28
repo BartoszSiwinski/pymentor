@@ -48,7 +48,8 @@ def select_relevant_columns(df: pd.DataFrame):
         'Q40',  # business unit
         'Q21',  # years of experience
         'Q22',  # 'Mentor' or 'Mentee' or 'Both - Mentor and Mentee'
-        'Q23'   # ERG
+        'Q23',  # ERG
+        'Q38',  # mentor capacity
     ]
 
     relevant_columns = columns_with_personal_data
@@ -70,7 +71,8 @@ def rename_columns(df: pd.DataFrame):
             "Q40": "business_unit",
             "Q21": "years_of_experience",
             "Q22": "role",
-            "Q23": "employee_resource_group"
+            "Q23": "employee_resource_group",
+            "Q38": "mentor_capacity"
         }
     )
     return df

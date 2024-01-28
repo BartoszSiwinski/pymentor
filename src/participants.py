@@ -25,9 +25,7 @@ class Mentee:
 class Mentor:
     person: Person
     expertise: dict[str:int]
-    # added for future possibility of having one person
-    # mentoring multiple mentees
-    mentor_sub_id: int = 0
+    sub_id: int
 
     def __hash__(self) -> int:
-        return hash(f"mentor_{self.person.email_address}_{self.mentor_sub_id}")
+        return hash(f"mentor_{self.person.email_address}_{self.sub_id}")

@@ -2,25 +2,11 @@ from typing import Optional
 
 import networkx as nx
 
-from src.data_classes import Mentee, Mentor, Person
-
-
-def have_mentorship_overlap(
-        mentor: Mentor,
-        mentee: Mentee,
-        min_interest_priority_level: Optional[int] = None
-) -> bool:
-    if min_interest_priority_level is None:
-        min_interest_priority_level = 999
-
-    for interest in mentee.interests:
-        if (
-                mentee.interests[interest] <= min_interest_priority_level
-                and interest in mentor.expertise
-                and mentor.expertise[interest] <= min_interest_priority_level
-        ):
-            return True
-    return False
+from src.participants import Mentee, Mentor, Person
+from src.matching_conditions import (
+    are_mentor_and_mentee_a_match_under_conditions,
+    TYPE_FOR_FUNCTION_CHECKING_MATCHING_CONDITION
+)
 
 
 def get_mentors_and_mentees(
@@ -46,7 +32,15 @@ def get_mentors_and_mentees(
             mentees.append(Mentee(person, participant["mentee_interests"]))
 
         if participant["role"] in {'mentor', 'both'}:
-            mentors.append(Mentor(person, participant["mentor_expertise"]))
+            if (
+                type(participant["mentor_capacity"]) is not int
+                    or participant["mentor_capacity"] < 0
+            ):
+                raise ValueError(
+                    "Value of the field 'mentor_capacity' has to be positive integer."
+                    f" Got '{participant['mentor_capacity']}' instead.")
+            for i in range(participant["mentor_capacity"]):
+                mentors.append(Mentor(person, participant["mentor_expertise"], i))
 
     return mentors, mentees
 
@@ -54,7 +48,7 @@ def get_mentors_and_mentees(
 def get_mentor_mentee_pairs(
         mentors: list[Mentor],
         mentees: list[Mentee],
-        min_engagement_level: Optional[int] = None
+        matching_conditions: list[TYPE_FOR_FUNCTION_CHECKING_MATCHING_CONDITION]
 ) -> list[tuple[Mentor, Mentee]]:
     graph = nx.Graph()
 
@@ -63,12 +57,7 @@ def get_mentor_mentee_pairs(
 
     for mentor in mentors:
         for mentee in mentees:
-            if (
-                # mentor.person.years_of_experience >= mentee.person.years_of_experience and
-                # mentor.person.business_unit != mentee.person.business_unit and
-                have_mentorship_overlap(mentor, mentee, min_engagement_level) and
-                mentor.person != mentee.person
-            ):
+            if are_mentor_and_mentee_a_match_under_conditions(mentor, mentee, matching_conditions):
                 graph.add_edge(mentor, mentee)
 
     results: list[tuple[Mentor, Mentee]] = list(

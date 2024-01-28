@@ -2,7 +2,7 @@ import os
 
 import pandas as pd
 
-from data_classes import Mentee, Mentor
+from participants import Mentee, Mentor
 
 
 def _append_data_to_excel(
@@ -35,7 +35,8 @@ def save_mentors_to_excel(
                 "years_of_experience": mentor.person.years_of_experience,
                 "business_unit": mentor.person.business_unit,
                 "assigned": mentor in assigned_mentors,
-                "expertise": list(mentor.expertise.keys())
+                "expertise": list(mentor.expertise.keys()),
+                "sub_id": mentor.sub_id
             } for mentor in assigned_mentors + unassigned_mentors
         ]
     )
