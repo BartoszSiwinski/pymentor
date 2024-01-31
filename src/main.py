@@ -27,6 +27,8 @@ def main():
     ]
     mentoring_matcher.match_unassigned(conditions_for_first_round)
 
+    save_results(mentoring_matcher, 'first_round_results.xlsx')
+
     conditions_for_second_round = [
         matching_conditions.check_mentor_and_mentee_are_not_from_the_same_business_unit,
         matching_conditions.check_mentor_has_no_less_experience_than_mentee,
@@ -35,26 +37,32 @@ def main():
     ]
     mentoring_matcher.match_unassigned(conditions_for_second_round)
 
+    save_results(mentoring_matcher, 'second_round_results.xlsx')
+
     conditions_for_third_round = [
         matching_conditions.get_competency_overlap_checker(),
         matching_conditions.check_mentor_and_mentee_are_not_the_same_person,
     ]
     mentoring_matcher.match_unassigned(conditions_for_third_round)
 
+    save_results(mentoring_matcher, 'final_results.xlsx')
+
+
+def save_results(mentoring_matcher: MentoringMatcher, file_path):
     save_mentors_to_excel(
-        RESULTS_FILE_PATH,
+        file_path,
         'all_mentors',
         mentoring_matcher.assigned_mentors,
         mentoring_matcher.unassigned_mentors
     )
     save_mentees_to_excel(
-        RESULTS_FILE_PATH,
+        file_path,
         'all_mentees',
         mentoring_matcher.assigned_mentees,
         mentoring_matcher.unassigned_mentees
     )
     save_mentorship_pairs_excel(
-        RESULTS_FILE_PATH,
+        file_path,
         'mentoring_pairs',
         mentoring_matcher.matched_pairs
     )
