@@ -96,18 +96,18 @@ def consolidate_interests(
     return df
 
 
-def consolidate_mentee_interests(df: pd.DataFrame):
+def consolidate_mentor_expertise(df: pd.DataFrame):
     mentee_interests_columns = [
         column for column in df.columns if column.startswith('Q6_')
     ]
 
     return consolidate_interests(
         df,
-        'mentee_interests',
+        'mentor_expertise',
         mentee_interests_columns)
 
 
-def consolidate_mentor_expertise(df: pd.DataFrame):
+def consolidate_mentee_interests(df: pd.DataFrame):
     mentee_interests_columns = [
         column for column in df.columns
         if column.startswith(("Q70_", "Q71_", "Q72_", "Q73_"))
@@ -115,7 +115,7 @@ def consolidate_mentor_expertise(df: pd.DataFrame):
 
     return consolidate_interests(
         df,
-        'mentor_expertise',
+        'mentee_interests',
         mentee_interests_columns
     )
 
