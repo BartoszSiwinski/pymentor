@@ -29,9 +29,10 @@ def get_processed_data_for_mentoring_program(
     df = consolidate_mentor_expertise(df)
     df = process_experience_range_column_values(df)
     df = process_role_column_values(df)
+    df = process_mentor_capacity(df)
 
     if save_to_json:
-        df.to_json('../data_from_excel.json', indent=4, orient='records')
+        df.to_json('data_from_excel.json', indent=4, orient='records')
 
     return df.to_dict(orient='records')
 
@@ -123,11 +124,13 @@ def consolidate_mentee_interests(df: pd.DataFrame):
 def process_experience_range_column_values(df: pd.DataFrame):
     df["years_of_experience"] = df["years_of_experience"].replace(
         {
-            "1-5 Years": 0,
-            "5-10 Years": 1,
-            "10-15 Years": 2,
-            "15-20 Years": 3,
-            "20+ Years": 4,
+            "0-1 Year": 0,
+            "1-5 Years": 1,
+            "5-10 Years": 2,
+            "10-15 Years": 3,
+            "15-20 Years": 4,
+            "20-25 Years": 5,
+            "Above 25 Years": 6
         }
     )
     return df
@@ -142,3 +145,9 @@ def process_role_column_values(df: pd.DataFrame):
         }
     )
     return df
+
+
+def process_mentor_capacity(df: pd.DataFrame):
+    df["mentor_capacity"] = df["mentor_capacity"].replace('NaN', pd.NA).fillna(0).astype(int)
+    return df
+
